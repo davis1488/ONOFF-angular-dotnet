@@ -1,0 +1,16 @@
+# Angular
+frontend/todo-app/node_modules
+frontend/todo-app/dist
+frontend/todo-app/.angular
+
+# .NET
+backend/ApiTodo/bin
+backend/ApiTodo/obj
+
+# SQLite
+backend/ApiTodo/TodoDb.db
+backend/ApiTodo/TodoDb.db-shm
+backend/ApiTodo/TodoDb.db-wal
+
+# VS Code
+.vscode

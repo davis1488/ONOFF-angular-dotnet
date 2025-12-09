@@ -1,0 +1,43 @@
+<!-- <h2>Mis tareas</h2>
+
+<!-- Dashboard -->
+<div style="margin-bottom: 20px">
+  <strong>Total:</strong> {{ total }} |
+  <strong>Completadas:</strong> {{ completadas }} |
+  <strong>Pendientes:</strong> {{ pendientes }}
+</div>
+
+<!-- Crear tarea -->
+<div>
+  <input
+    type="text"
+    [(ngModel)]="nuevoTitulo"
+    placeholder="Nueva tarea"
+  />
+  <button (click)="agregar()" [disabled]="loading">
+    Agregar
+  </button>
+</div>
+
+<hr />
+
+<!-- Lista -->
+<ul>
+  <li *ngFor="let todo of todos">
+    <input
+      type="checkbox"
+      [checked]="todo.completado"
+      (change)="toggle(todo)"
+    />
+
+    <span [style.text-decoration]="todo.completado ? 'line-through' : 'none'">
+      {{ todo.titulo }}
+    </span>
+
+    <button (click)="eliminar(todo.id)">❌</button>
+  </li>
+</ul> -->
+
+
+<h2>Mis tareas</h2>
+<p>Login OK. Aquí vamos a mostrar la lista de tarea.</p>
