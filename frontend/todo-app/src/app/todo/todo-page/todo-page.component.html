@@ -1,43 +1,105 @@
-<!-- <h2>Mis tareas</h2>
-
-<!-- Dashboard -->
-<div style="margin-bottom: 20px">
-  <strong>Total:</strong> {{ total }} |
-  <strong>Completadas:</strong> {{ completadas }} |
-  <strong>Pendientes:</strong> {{ pendientes }}
-</div>
-
-<!-- Crear tarea -->
-<div>
-  <input
-    type="text"
-    [(ngModel)]="nuevoTitulo"
-    placeholder="Nueva tarea"
-  />
-  <button (click)="agregar()" [disabled]="loading">
-    Agregar
-  </button>
-</div>
-
-<hr />
-
-<!-- Lista -->
-<ul>
-  <li *ngFor="let todo of todos">
-    <input
-      type="checkbox"
-      [checked]="todo.completado"
-      (change)="toggle(todo)"
-    />
-
-    <span [style.text-decoration]="todo.completado ? 'line-through' : 'none'">
-      {{ todo.titulo }}
+<div class="todo-container">
+  <!-- Toolbar -->
+  <mat-toolbar color="primary" class="toolbar">
+    <span class="toolbar-title">
+      <mat-icon>checklist</mat-icon>
+      Mis Tareas
     </span>
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="Cuenta">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <div class="user-info">
+        <mat-icon>person</mat-icon>
+        <span>{{ currentUser?.email }}</span>
+      </div>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
 
-    <button (click)="eliminar(todo.id)">❌</button>
-  </li>
-</ul> -->
+  <div class="content">
+    <!-- Dashboard de Estadísticas -->
+    <app-dashboard [stats]="store.stats()" />
 
+    <!-- Card Principal -->
+    <mat-card class="main-card">
+      <!-- Filtros -->
+      <div class="filters">
+        <mat-chip-listbox [value]="store.filter()" (change)="setFilter($event.value)">
+          <mat-chip-option value="all">Todas</mat-chip-option>
+          <mat-chip-option value="pending">Pendientes</mat-chip-option>
+          <mat-chip-option value="completed">Completadas</mat-chip-option>
+        </mat-chip-listbox>
+      </div>
 
-<h2>Mis tareas</h2>
-<p>Login OK. Aquí vamos a mostrar la lista de tarea.</p>
+      <!-- Input para nueva tarea -->
+      <div class="add-task">
+        <mat-form-field appearance="outline" class="task-input">
+          <mat-label>Nueva tarea</mat-label>
+          <input matInput 
+                 [(ngModel)]="nuevoTitulo"
+                 (keyup.enter)="agregar()"
+                 placeholder="¿Qué necesitas hacer?"
+                 [disabled]="store.loading()">
+          <mat-icon matPrefix>add_task</mat-icon>
+        </mat-form-field>
+        <button mat-raised-button 
+                color="primary"
+                (click)="agregar()"
+                [disabled]="store.loading() || !nuevoTitulo.trim()"
+                class="add-button">
+          <mat-icon>add</mat-icon>
+          Agregar
+        </button>
+      </div>
+
+      <!-- Loading spinner -->
+      <div class="loading-container" *ngIf="store.loading()">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando tareas...</p>
+      </div>
+
+      <!-- Lista de tareas -->
+      <div class="tasks-list" *ngIf="!store.loading()">
+        <div *ngIf="store.filteredTodos().length === 0" class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <p>No hay tareas {{ store.filter() === 'all' ? '' : store.filter() === 'completed' ? 'completadas' : 'pendientes' }}</p>
+          <p class="empty-hint">
+            {{ store.filter() === 'all' ? '¡Agrega tu primera tarea!' : 'Cambia el filtro para ver otras tareas' }}
+          </p>
+        </div>
+
+        <mat-card 
+          *ngFor="let todo of store.filteredTodos(); trackBy: trackByFn" 
+          class="task-card"
+          [class.completed]="todo.completado">
+          
+          <div class="task-content">
+            <mat-checkbox 
+              [checked]="todo.completado"
+              (change)="toggle(todo)"
+              color="primary">
+            </mat-checkbox>
+            
+            <span class="task-title" [class.completed]="todo.completado">
+              {{ todo.titulo }}
+            </span>
+          </div>
+
+          <div class="task-actions">
+            <button mat-icon-button 
+                    color="warn"
+                    (click)="eliminar(todo.id)"
+                    matTooltip="Eliminar tarea">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </mat-card>
+  </div>
+</div>
