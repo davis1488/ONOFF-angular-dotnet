@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend/ApiTodo
+      dockerfile: Dockerfile
+    container_name: todo-backend
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Data Source=apptodo.db
+      - Jwt__Key=SuperSecretKeyForJWTAuthenticationWith32Characters!!!
+      - Jwt__Issuer=ApiTodoIssuer
+      - Jwt__Audience=ApiTodoAudience
+    volumes:
+      - ./backend/ApiTodo:/app/data
+    networks:
+      - todo-network
+
+  frontend:
+    build:
+      context: ./frontend/todo-app
+      dockerfile: Dockerfile
+    container_name: todo-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - todo-network
+
+networks:
+  todo-network:
+    driver: bridge
