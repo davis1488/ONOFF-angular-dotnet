@@ -1,21 +1,107 @@
-<div class="login">
-  <h2>Iniciar sesión</h2>
+<div class="login-wrapper">
+  <!-- Sección izquierda con branding -->
+  <div class="branding-section">
+    <div class="branding-content">
+      <div class="logo-container">
+        <mat-icon class="logo-icon">task_alt</mat-icon>
+        <h1 class="brand-name">TaskMaster</h1>
+      </div>
+      <h2 class="brand-tagline">Organiza tu día, alcanza tus metas</h2>
+      <p class="brand-description">
+        La herramienta perfecta para gestionar tus tareas diarias con eficiencia y estilo profesional.
+      </p>
+      <div class="features-list">
+        <div class="feature-item">
+          <mat-icon>check_circle</mat-icon>
+          <span>Gestión inteligente de tareas</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>check_circle</mat-icon>
+          <span>Métricas en tiempo real</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>check_circle</mat-icon>
+          <span>Interfaz moderna y responsiva</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <form (ngSubmit)="submit()">
-    <label>
-      Email
-      <input type="email" [(ngModel)]="email" name="email">
-    </label>
+  <!-- Sección derecha con formulario -->
+  <div class="form-section">
+    <mat-card class="login-card">
+      <div class="card-header">
+        <h2>Bienvenido de vuelta</h2>
+        <p class="subtitle">Inicia sesión para continuar</p>
+      </div>
 
-    <label>
-      Contraseña
-      <input type="password" [(ngModel)]="password" name="password">
-    </label>
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" class="login-form">
+        <mat-form-field appearance="outline" class="custom-field">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput 
+                 type="email" 
+                 formControlName="email"
+                 autocomplete="email">
+          <mat-icon matPrefix class="field-icon">alternate_email</mat-icon>
+          <mat-error *ngIf="loginForm.get('email')?.invalid">
+            {{ getErrorMessage('email') }}
+          </mat-error>
+        </mat-form-field>
 
-    <button type="submit" [disabled]="loading">
-      {{ loading ? 'Ingresando...' : 'Entrar' }}
-    </button>
+        <mat-form-field appearance="outline" class="custom-field">
+          <mat-label>Contraseña</mat-label>
+          <input matInput 
+                 [type]="hidePassword ? 'password' : 'text'"
+                 formControlName="password"
+                 autocomplete="current-password">
+          <mat-icon matPrefix class="field-icon">lock_outline</mat-icon>
+          <button mat-icon-button 
+                  matSuffix 
+                  (click)="hidePassword = !hidePassword"
+                  type="button"
+                  class="visibility-toggle"
+                  [attr.aria-label]="'Mostrar contraseña'">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.invalid">
+            {{ getErrorMessage('password') }}
+          </mat-error>
+        </mat-form-field>
 
-    <p *ngIf="error" style="color:red">{{ error }}</p>
-  </form>
+        <button mat-raised-button 
+                color="primary" 
+                type="submit"
+                class="submit-button"
+                [disabled]="loading || loginForm.invalid">
+          <mat-spinner diameter="20" *ngIf="loading" class="button-spinner"></mat-spinner>
+          <span *ngIf="!loading">Iniciar Sesión</span>
+          <span *ngIf="loading">Iniciando...</span>
+        </button>
+
+        <div class="demo-credentials">
+          <div class="demo-header">
+            <mat-icon>info</mat-icon>
+            <span>Credenciales de prueba</span>
+          </div>
+          <div class="demo-info">
+            <div class="demo-item">
+              <mat-icon class="demo-icon">email</mat-icon>
+              <span>user&#64;test.com</span>
+            </div>
+            <div class="demo-item">
+              <mat-icon class="demo-icon">vpn_key</mat-icon>
+              <span>Password123!</span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="card-footer">
+        <p class="footer-text">
+          <mat-icon>security</mat-icon>
+          Conexión segura con encriptación SSL
+        </p>
+      </div>
+    </mat-card>
+  </div>
 </div>
