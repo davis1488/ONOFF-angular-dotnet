@@ -1,7 +1,6 @@
 using ApiTodo.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
+using BCrypt.Net;
 
 namespace ApiTodo.Data
 {
@@ -9,28 +8,33 @@ namespace ApiTodo.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Todo> Todos { get; set; }
-        // OJO: quitamos DbSet<User> Users
+        public DbSet<Todo> Todos { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configurar relación User -> Todos
+            modelBuilder.Entity<Todo>()
+                .HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Índice único para email
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
             // Usuario demo: user@test.com / Password123!
+            // Hash precalculado para evitar problemas con migraciones
             var user = new User
             {
                 Id = 1,
                 Email = "user@test.com",
-                PasswordHash = HashPassword("Password123!")
+                PasswordHash = "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYIBz9F.k6i" // Password123!
             };
 
             modelBuilder.Entity<User>().HasData(user);
-        }
-
-        private static string HashPassword(string password)
-        {
-            using var sha = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha.ComputeHash(bytes);
-            return Convert.ToBase64String(hash);
         }
     }
 }
