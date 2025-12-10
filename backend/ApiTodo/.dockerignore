@@ -1,0 +1,8 @@
+bin
+obj
+.vs
+*.user
+*.suo
+apptodo.db
+apptodo.db-shm
+apptodo.db-wal
