@@ -6,27 +6,40 @@ export interface Todo {
   id: number;
   titulo: string;
   completado: boolean;
+  userId: number;
+}
+
+export interface TodoStats {
+  total: number;
+  completed: number;
+  pending: number;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-
   private apiUrl = '/api/Todo';
 
   constructor(private http: HttpClient) {}
 
-  getTodos(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.apiUrl);
+  getTodos(filter: 'all' | 'completed' | 'pending' = 'all'): Observable<Todo[]> {
+    return this.http.get<Todo[]>(`${this.apiUrl}?filter=${filter}`);
+  }
+
+  getStats(): Observable<TodoStats> {
+    return this.http.get<TodoStats>(`${this.apiUrl}/stats`);
   }
 
   addTodo(titulo: string): Observable<Todo> {
     return this.http.post<Todo>(this.apiUrl, { titulo });
   }
 
-  updateTodo(todo: Todo): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${todo.id}`, todo);
+  updateTodo(todo: Todo): Observable<Todo> {
+    return this.http.put<Todo>(`${this.apiUrl}/${todo.id}`, {
+      titulo: todo.titulo,
+      completado: todo.completado
+    });
   }
 
   deleteTodo(id: number): Observable<void> {
