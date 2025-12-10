@@ -1,0 +1,37 @@
+<div class="stats-container">
+  <mat-card class="stat-card total">
+    <mat-card-content>
+      <div class="stat-content">
+        <mat-icon class="stat-icon">assignment</mat-icon>
+        <div class="stat-info">
+          <h3>{{ stats().total }}</h3>
+          <p>Total de Tareas</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="stat-card completed">
+    <mat-card-content>
+      <div class="stat-content">
+        <mat-icon class="stat-icon">check_circle</mat-icon>
+        <div class="stat-info">
+          <h3>{{ stats().completed }}</h3>
+          <p>Completadas</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="stat-card pending">
+    <mat-card-content>
+      <div class="stat-content">
+        <mat-icon class="stat-icon">pending</mat-icon>
+        <div class="stat-info">
+          <h3>{{ stats().pending }}</h3>
+          <p>Pendientes</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
