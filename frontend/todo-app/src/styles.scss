@@ -1,1 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { 
+  height: 100%; 
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  background: #f5f5f5;
+}
+
+/* Snackbar Styles */
+.success-snackbar {
+  background: #4caf50 !important;
+  color: white !important;
+  
+  .mat-mdc-button {
+    color: white !important;
+  }
+}
+
+.error-snackbar {
+  background: #f44336 !important;
+  color: white !important;
+  
+  .mat-mdc-button {
+    color: white !important;
+  }
+}
+
+.warning-snackbar {
+  background: #ff9800 !important;
+  color: white !important;
+  
+  .mat-mdc-button {
+    color: white !important;
+  }
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
